@@ -1,9 +1,6 @@
 package com.example.store.infrastructure.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +24,14 @@ public class ProductEntity {
 
     private BigDecimal price;
 
-    private UUID categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity category;
 
-    private UUID brandId;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id", nullable = false)
+    private BrandEntity brand;
+
+
 }

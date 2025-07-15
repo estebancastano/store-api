@@ -3,6 +3,7 @@ package com.example.store.infrastructure.controller;
 import com.example.store.application.usecase.ProductService;
 import com.example.store.domain.model.Product;
 import com.example.store.shared.dto.ProductDto;
+import com.example.store.shared.mapper.ProductDtoMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +19,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final ProductDtoMapper productDtoMapper;
 
     @PostMapping
     public ResponseEntity<ProductDto> create(@RequestBody @Valid ProductDto productDto) {
-        Product product = toModel(productDto);
+        Product product = productDtoMapper.toModel(productDto);
         Product savedProduct = productService.create(product);
         return ResponseEntity.created(URI.create("/api/products/" + savedProduct.getId()))
-                .body(toDto(savedProduct));
+                .body(productDtoMapper.toDto(savedProduct));
     }
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> findAll() {
-        List<ProductDto> products = productService.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        List<ProductDto> products = productService.findAll().stream().map(productDtoMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> findById(@PathVariable UUID id) {
         Product product = productService.getById(id);
-        return ResponseEntity.ok(toDto(product));
+        return ResponseEntity.ok(productDtoMapper.toDto(product));
     }
 
     @DeleteMapping("/{id}")
@@ -45,25 +47,4 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    private ProductDto toDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setCategoryId(product.getCategoryId());
-        productDto.setBrandId(product.getBrandId());
-        return productDto;
-    }
-
-    private Product toModel(ProductDto productDto) {
-        return new Product(
-                productDto.getId(),
-                productDto.getName(),
-                productDto.getDescription(),
-                productDto.getPrice(),
-                productDto.getCategoryId(),
-                productDto.getBrandId()
-        );
-    }
 }
