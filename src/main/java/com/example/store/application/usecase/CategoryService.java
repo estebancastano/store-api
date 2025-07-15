@@ -28,4 +28,10 @@ public class CategoryService {
     public void delete(UUID id) {
         categoryRepository.delete(id);
     }
+
+    public Category update(UUID id, Category category) {
+        Category existingCategory = getById(id);
+        category.setId(existingCategory.getId());
+        return categoryRepository.save(category);
+    }
 } 

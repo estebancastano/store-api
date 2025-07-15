@@ -46,4 +46,23 @@ public class BrandController {
         brandService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BrandDto> update(@PathVariable UUID id, @RequestBody @Valid BrandDto brandDto) {
+        Brand brand = brandDtoMapper.toModel(brandDto);
+        Brand updatedBrand = brandService.update(id, brand);
+        return ResponseEntity.ok(brandDtoMapper.toDto(updatedBrand));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BrandDto> partialUpdate(@PathVariable UUID id, @RequestBody BrandDto brandDto) {
+        Brand existingBrand = brandService.getById(id);
+        
+        if (brandDto.getName() != null) {
+            existingBrand.setName(brandDto.getName());
+        }
+        
+        Brand updatedBrand = brandService.update(id, existingBrand);
+        return ResponseEntity.ok(brandDtoMapper.toDto(updatedBrand));
+    }
 } 

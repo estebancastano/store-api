@@ -28,4 +28,10 @@ public class ProductService {
     public void delete(UUID id) {
         productRepository.delete(id);
     }
+
+    public Product update(UUID id, Product product) {
+        Product existingProduct = getById(id);
+        product.setId(existingProduct.getId());
+        return productRepository.save(product);
+    }
 }

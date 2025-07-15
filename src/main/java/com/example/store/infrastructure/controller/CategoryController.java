@@ -46,4 +46,23 @@ public class CategoryController {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryDto> update(@PathVariable UUID id, @RequestBody @Valid CategoryDto categoryDto) {
+        Category category = categoryDtoMapper.toModel(categoryDto);
+        Category updatedCategory = categoryService.update(id, category);
+        return ResponseEntity.ok(categoryDtoMapper.toDto(updatedCategory));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryDto> partialUpdate(@PathVariable UUID id, @RequestBody CategoryDto categoryDto) {
+        Category existingCategory = categoryService.getById(id);
+        
+        if (categoryDto.getName() != null) {
+            existingCategory.setName(categoryDto.getName());
+        }
+        
+        Category updatedCategory = categoryService.update(id, existingCategory);
+        return ResponseEntity.ok(categoryDtoMapper.toDto(updatedCategory));
+    }
 } 

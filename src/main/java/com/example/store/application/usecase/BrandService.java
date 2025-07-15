@@ -28,4 +28,10 @@ public class BrandService {
     public void delete(UUID id) {
         brandRepository.delete(id);
     }
+
+    public Brand update(UUID id, Brand brand) {
+        Brand existingBrand = getById(id);
+        brand.setId(existingBrand.getId());
+        return brandRepository.save(brand);
+    }
 } 

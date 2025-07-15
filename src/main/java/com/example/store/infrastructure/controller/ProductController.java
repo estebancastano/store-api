@@ -47,4 +47,34 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto> update(@PathVariable UUID id, @RequestBody @Valid ProductDto productDto) {
+        Product product = productDtoMapper.toModel(productDto);
+        Product updatedProduct = productService.update(id, product);
+        return ResponseEntity.ok(productDtoMapper.toDto(updatedProduct));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductDto> partialUpdate(@PathVariable UUID id, @RequestBody ProductDto productDto) {
+        Product existingProduct = productService.getById(id);
+        
+        if (productDto.getName() != null) {
+            existingProduct.setName(productDto.getName());
+        }
+        if (productDto.getDescription() != null) {
+            existingProduct.setDescription(productDto.getDescription());
+        }
+        if (productDto.getPrice() != null) {
+            existingProduct.setPrice(productDto.getPrice());
+        }
+        if (productDto.getCategoryId() != null) {
+            existingProduct.setCategoryId(productDto.getCategoryId());
+        }
+        if (productDto.getBrandId() != null) {
+            existingProduct.setBrandId(productDto.getBrandId());
+        }
+        
+        Product updatedProduct = productService.update(id, existingProduct);
+        return ResponseEntity.ok(productDtoMapper.toDto(updatedProduct));
+    }
 }
