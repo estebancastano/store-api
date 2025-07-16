@@ -26,13 +26,13 @@ public class ProductMapper {
         BrandEntity brandEntity = new BrandEntity();
         brandEntity.setId(model.getBrandId());
 
-        return new ProductEntity(
-                model.getId(),
-                model.getName(),
-                model.getDescription(),
-                model.getPrice(),
-                categoryEntity,
-                brandEntity
-        );
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setId(model.getId());
+        productEntity.setName(model.getName());
+        productEntity.setDescription(model.getDescription());
+        productEntity.setPrice(model.getPrice());
+        productEntity.setCategory(categoryEntity);
+        productEntity.setBrand(brandEntity);
+        return productEntity;
     }
 }

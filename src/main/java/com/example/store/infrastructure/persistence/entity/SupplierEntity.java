@@ -10,17 +10,21 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "brands")
+@Table(name = "suppliers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BrandEntity {
+public class SupplierEntity {
     @Id
     @GeneratedValue
     private UUID id;
 
     private String name;
+    private String email;
+    private String phone;
+    private String address;
+    private String contactPerson;
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductEntity> products = new ArrayList<>();
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PurchaseEntity> purchases = new ArrayList<>();
 }

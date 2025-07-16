@@ -11,6 +11,9 @@ public class CategoryMapper {
     }
 
     public CategoryEntity toEntity(Category model) {
-        return new CategoryEntity(model.getId(), model.getName());
+        CategoryEntity entity = new CategoryEntity();
+        entity.setId(model.getId());
+        entity.setName(model.getName());
+        return entity;
     }
 } 

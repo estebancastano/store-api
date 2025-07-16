@@ -11,6 +11,9 @@ public class BrandMapper {
     }
 
     public BrandEntity toEntity(Brand model) {
-        return new BrandEntity(model.getId(), model.getName());
+        BrandEntity entity = new BrandEntity();
+        entity.setId(model.getId());
+        entity.setName(model.getName());
+        return entity;
     }
 } 
